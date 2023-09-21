@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+#Visão do usuário
 class ViewUser(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -207,7 +208,7 @@ class ViewUser(ttk.Frame):
 
         # message
         self.message_label = ttk.Label(self, text='', foreground='red')
-        self.message_label.grid(row=self.last_row+1, column=1, sticky=tk.W)
+        self.message_label.grid(row=0, column=2, sticky=tk.W)
 
         # set the controller
         self.controller = None
@@ -298,24 +299,55 @@ class ViewQuadra(ttk.Frame):
 
     def __init__(self, parent):
         super().__init__(parent)
+        #Dicionario de posiçoes de coluna
+        self.griddict = {'nome': 1, 'local': 2, 'capacidade': 3, 'horario_disp': 4, 'horario_limp': 5, 'last': 6}
+        nome = self.griddict['nome']
+        local = self.griddict['local']
+        capacidade = self.griddict['capacidade']
+        horario_disp = self.griddict['horario_disp']
+        horario_limp = self.griddict['horario_limp']
+        last = self.griddict['last']
+        
+        # Labels
+        self.labelnome = ttk.Label(self, text='Nome da Quadra:')
+        self.labelnome.grid(row=nome, column=0)
+        self.labelnome = ttk.Label(self, text='Local:')
+        self.labelnome.grid(row=local, column=0)
+        self.labelnome = ttk.Label(self, text='Capacidade:')
+        self.labelnome.grid(row=capacidade, column=0)
+        self.labelnome = ttk.Label(self, text='Horario Disponivel:')
+        self.labelnome.grid(row=horario_disp, column=0)
+        self.labelnome = ttk.Label(self, text='Horario de Limpeza:')
+        self.labelnome.grid(row=horario_limp,column=0)
 
-        # create widgets
-        # label
-        self.label = ttk.Label(self, text='Quadra:')
-        self.label.grid(row=1, column=0)
-
-        # email entry
-        self.email_var = tk.StringVar()
-        self.email_entry = ttk.Entry(self, textvariable=self.email_var, width=30)
-        self.email_entry.grid(row=1, column=1, sticky=tk.NSEW)
+        # Nome
+        self.nome_var = tk.StringVar()
+        self.nome_entry = ttk.Entry(self, textvariable=self.nome_var, width=30)
+        self.nome_entry.grid(row=nome, column=1)
+        # Local
+        self.local_var = tk.StringVar()
+        self.local_entry = ttk.Entry(self, textvariable=self.local_var, width=30)
+        self.local_entry.grid(row=local, column=1)
+        # Capacidade
+        self.capacidade_var = tk.StringVar()
+        self.capacidade_entry = ttk.Entry(self, textvariable=self.capacidade_var, width=30)
+        self.capacidade_entry.grid(row=capacidade, column=1)
+        # Horario Disponivel
+        self.horario_disp_var = tk.StringVar()
+        self.horario_disp_entry = ttk.Entry(self, textvariable=self.horario_disp_var, width=30)
+        self.horario_disp_entry.grid(row=horario_disp, column=1)
+        # Horario Limpeza
+        self.horario_limp_var = tk.StringVar()
+        self.horario_limp_entry = ttk.Entry(self, textvariable=self.horario_limp_var, width=30)
+        self.horario_limp_entry.grid(row=horario_limp, column=1)
 
         # save button
         self.save_button = ttk.Button(self, text='Save', command=self.save_button_clicked)
         self.save_button.grid(row=1, column=3, padx=10)
 
-        # message
+        # Mensagem (Acerto ou erro)
         self.message_label = ttk.Label(self, text='', foreground='red')
-        self.message_label.grid(row=2, column=1, sticky=tk.W)
+        self.message_label.grid(row=last, column=1, sticky=tk.W)
 
         # set the controller
         self.controller = None
@@ -334,7 +366,7 @@ class ViewQuadra(ttk.Frame):
         :return:
         """
         if self.controller:
-            self.controller.save(self.email_var.get())
+            self.controller.save(nome = self.nome_var.get(), local = self.local_var.get(), capacidade = self.capacidade_var.get(), horario_limp = self.horario_limp_var.get(), horario_disp = self.horario_disp_var.get())
 
     def show_error(self, message):
         """
@@ -357,10 +389,24 @@ class ViewQuadra(ttk.Frame):
         self.message_label['foreground'] = 'green'
         self.message_label.after(3000, self.hide_message)
 
-        # reset the form
-        self.email_entry['foreground'] = 'black'
-        self.email_var.set('')
+        # Resetar formulario
 
+        #Nome
+        self.nome_entry['foreground'] = 'black'
+        self.nome_var.set('')
+        #Local
+        self.local_entry['foreground'] = 'black'
+        self.local_var.set('')
+        #Capacidade
+        self.capacidade_entry['foreground'] = 'black'
+        self.capacidade_var.set('')
+        #Horario Disponivel
+        self.horario_disp_entry['foreground'] = 'black'
+        self.horario_disp_var.set('')
+        #Horario Limpeza
+        self.horario_limp_entry['foreground'] = 'black'
+        self.horario_limp_var.set('')
+       
     def hide_message(self):
         """
         Hide the message
