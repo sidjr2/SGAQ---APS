@@ -1,3 +1,0 @@
-# SISTEMA DE GERENCIAMENTO DE ALOCAÇÃO DE QUADRA - SGAQ
-
-python + tkinter + mysql
