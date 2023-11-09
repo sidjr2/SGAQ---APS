@@ -38,6 +38,14 @@ class Quadra:
         self.horario_disponivel = horario_disponivel
         self.horario_limpeza = horario_limpeza
 
+class Reserva: 
+    def __init__(self,reservaId, quadraid, usuarioId, data, hora):
+        self.reservaId = quadraid
+        self.quadraid = quadraid
+        self.usuarioId = nome
+        self.data = data
+        self.hora = hora
+
 
 class Model:
        
@@ -69,4 +77,19 @@ class Model:
     def deleteUser(self, matricula):
         mycursor.execute(f"DELETE FROM usuarios WHERE matricula = '{matricula}'")
         mydb.commit()
+    
+    def criaReserva(self,reservaId, quadraid, usuarioId, data, hora):
+        sql = "INSERT INTO reservas (reservaid, quadraid, usuarioid, data, hora) VALUES (%s, %s,%s,%s,%s)"
+        val = (f"{reservaId}", f"{quadraid}",f"{usuarioid}",f"{data}",f"{hora}")
+        mycursor.execute(sql, val)
+        mydb.commit()
 
+    def listarReservas(self):
+       mycursor.execute('SELECT reservas.*, usuarios.nome AS nome_usuario, quadras.nome AS nome_quadra FROM reservas INNER JOIN usuarios ON reservas.usuarioid = usuarios.matricula INNER JOIN quadras ON reservas.quadraid = quadras.quadraid')
+        resultados = mycursor.fetchall()
+        return resultados
+
+    def visualizarReserva(self,reservaid):
+        mycursor.execute(f"SELECT reservas.*, usuarios.nome AS nome_usuario, quadras.nome AS nome_quadra FROM reservas INNER JOIN usuarios ON reservas.usuarioid = usuarios.matricula INNER JOIN quadras ON reservas.quadraid = quadras.quadraid WHERE reservaid = '{reservaid}'")
+        resultados = mycursor.fetchall()
+        return resultados

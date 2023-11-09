@@ -728,7 +728,28 @@ class AdmView(ttk.Frame):
         self.controller = controller
         for x in self.framelist:
             x.set_controller(controller)
-class GeralView:
-    print('GeralView')
+
+class GeralView(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        # Adicione os widgets para a criação e visualização de reserva de quadra aqui
+
+        self.criar_reserva_button = ttk.Button(self, text='Criar Reserva', command=self.criar_reserva)
+        self.criar_reserva_button.grid(row=0, column=0, padx=10, pady=10)
+
+        self.visualizar_reserva_button = ttk.Button(self, text='Visualizar Reserva', command=self.visualizar_reserva)
+        self.visualizar_reserva_button.grid(row=1, column=0, padx=10, pady=10)
+
+    def criar_reserva(self):
+        # Implemente a lógica para criar uma reserva de quadra aqui
+        nova_janela = tk.Toplevel(self)
+        nova_janela.title('Criar Reserva')
+        pass
+
+    def visualizar_reserva(self):
+        # Implemente a lógica para visualizar a reserva de quadra aqui
+        pass
+
 class ProfView:
     print('ProfView')
