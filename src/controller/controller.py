@@ -1,5 +1,4 @@
 
-
 class ControllerUser:
     def __init__(self, model, view):
         self.model = model
@@ -14,7 +13,7 @@ class ControllerUser:
         try:
 
             # save the model
-            self.model.criaUser(nome=nome,matricula = matricula, tipo = tipo, email = email, cargo = cargo, telefone = telefone, data_nascimento = data_nascimento,cidade = cidade, departamento = departamento, senha = senha)
+            self.model.criaUser(nome=nome ,matricula = matricula, tipo = tipo, email = email, cargo = cargo, telefone = telefone, data_nascimento = data_nascimento ,cidade = cidade, departamento = departamento, senha = senha)
 
             # show a success message
             self.view.show_success(f'Nome: {nome}, Matricula: {matricula}')
@@ -29,8 +28,9 @@ class ControllerQuadra:
                  self.view = view
 
             def savequadra(self, local, nome, horario_limp, horario_disp, capacidade):
-                self.model.criaQuadra(local=local,nome=nome,horario_limp=horario_limp,horario_disp=horario_disp, capacidade = capacidade)
-                self.view.show_success(f'Nome: {nome}, Local:{local}, Capacidade: {capacidade}, Horario Disponivel: {horario_disp}, Horario Limpeza: {horario_limp}')
+                self.model.criaQuadra(local=local ,nome=nome ,horario_limp=horario_limp ,horario_disp=horario_disp, capacidade = capacidade)
+                self.view.show_success \
+            (f'Nome: {nome}, Local:{local}, Capacidade: {capacidade}, Horario Disponivel: {horario_disp}, Horario Limpeza: {horario_limp}')
 
 class ControllerMenu:
     def __init__(self, model, view):
@@ -51,15 +51,16 @@ class ControllerAdm:
     
     def savequadra(self, local, nome, horario_limp, horario_disp, capacidade):
                 
-                self.model.criaQuadra(local=local,nome=nome,horario_limp=horario_limp,horario_disp=horario_disp, capacidade = capacidade)
+                self.model.criaQuadra(local=local ,nome=nome ,horario_limp=horario_limp ,horario_disp=horario_disp, capacidade = capacidade)
                 
-                self.view.show_success(f'Nome: {nome}, Local:{local}, Capacidade: {capacidade}, Horario Disponivel: {horario_disp}, Horario Limpeza: {horario_limp}')
+                self.view.show_success \
+            (f'Nome: {nome}, Local:{local}, Capacidade: {capacidade}, Horario Disponivel: {horario_disp}, Horario Limpeza: {horario_limp}')
 
     def saveuser(self, nome, matricula, tipo, email, cargo, telefone, data_nascimento, cidade, departamento, senha):
         try:
 
             # save the model
-            self.model.criaUser(nome=nome,matricula = matricula, tipo = tipo, email = email, cargo = cargo, telefone = telefone, data_nascimento = data_nascimento,cidade = cidade, departamento = departamento, senha = senha)
+            self.model.criaUser(nome=nome ,matricula = matricula, tipo = tipo, email = email, cargo = cargo, telefone = telefone, data_nascimento = data_nascimento ,cidade = cidade, departamento = departamento, senha = senha)
 
             # show a success message
             self.view.show_success(f'Nome: {nome}, Matricula: {matricula}')
@@ -72,10 +73,27 @@ class ControllerAdm:
         retorno = self.model.retornaUser()
         return retorno
     
+    def retornaquadra(self):
+         retorno = self.model.retornaQuadra()
+         return retorno
+    
     def deleteuser(self, matricula):
          self.model.deleteUser(matricula)
-    def edituser(self,matricula):
-         print('here')
+    
+    def deletequadra(self, matricula):
+         self.model.deleteQuadra(matricula)
+
+    def edituser(self ,matricula, alteracoes):
+         matriz = []
+         for i in alteracoes:
+            matriz.append(i.get())
+         self.model.editUser(matricula ,matriz)
+
+    def editquadra(self, quadra, alteracoes):
+        matriz = []
+        for i in alteracoes:
+            matriz.append(i.get())
+        self.model.editQuadra(quadra, matriz)
 
 class ControllerReserva:
     def __init__(self, model, view):
@@ -87,5 +105,6 @@ class ControllerReserva:
         self.model.criaReserva(reservaId=reservaId,quadraid=quadraid,usuarioId=usuarioId,data=data, hora = hora)
                 
         self.view.show_success(f'Reserva: {reservaId}, Local:{quadraid}, Capacidade: {usuarioId},Data:{data}, Horario: {hora}')
+        
     def visualizarReserva(self, reservaId):
          self.model.visualizarReserva(reservaId)

@@ -6,6 +6,7 @@ from view.view import *
 from tkinter import ttk
 import mysql.connector
 
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -14,24 +15,22 @@ class App(tk.Tk):
 
         # Cria o modelo
         model = Model()
-        
-        #Criando as views
+
+        # Criando as views
+        geralview = GeralView(self) 
         admview = AdmView(self)
         view = MainView(self, admview)
         # Criando os controladores
         controlleradm = ControllerAdm(model, view)
         controllermenu = ControllerMenu(model, view)
-         #Seta os controladores nas views
+        # Seta os controladores nas views
         admview.set_controller(controlleradm)
         view.set_controller(controllermenu)
 
-        #Desenha a view
+        # Desenha a view
         view.grid()
-        
-        
-        
-       
+
 
 if __name__ == '__main__':
     app = App()
-    app.mainloop()            
+    app.mainloop()

@@ -1,15 +1,16 @@
 import tkinter as tk
 from tkinter import ttk
 import copy
-#Menu principal
+
+
+# Menu principal
 
 class MainView(ttk.Frame):
     def __init__(self, master, adm):
         super().__init__(master)
         self.index = 0
         self.mainframe = ttk.Frame(master)
-        self.mainframe.grid(padx=10,pady=10)
-     
+        self.mainframe.grid(padx=10, pady=10)
 
         self.framelist = [adm]
         labels = ['Matricula', 'Senha']
@@ -19,31 +20,37 @@ class MainView(ttk.Frame):
         self.column = 0
 
         for i in labels:
-            self.label.append(tk.Label( text=f'{i}'))
-            self.label[self.row].grid(row=self.row,column=self.column)
-            self.row += 1 
+            self.label.append(tk.Label(text=f'{i}'))
+            self.label[self.row].grid(row=self.row, column=self.column)
+            self.row += 1
 
         self.row = 0
         self.column = 1
 
         self.matricula_var = tk.StringVar()
-        self.textomatricula = tk.Entry(textvariable = self.matricula_var)
-        self.textomatricula.grid(row=self.row,column=self.column)
+        self.textomatricula = tk.Entry(textvariable=self.matricula_var)
+        self.textomatricula.grid(row=self.row, column=self.column)
         self.row += 1
 
         self.senha_var = tk.StringVar()
-        self.textosenha = tk.Entry(textvariable = self.senha_var)
+        self.textosenha = tk.Entry(textvariable=self.senha_var)
         self.textosenha.grid(row=self.row, column=self.column)
-        self.row += 1
+        self.row += 2
 
-        self.botaologin = tk.Button(text= 'Login',command=self.realiza_login)
+        self.botaologin = tk.Button(text='Login', command=self.realiza_login)
         self.botaologin.grid(row=self.row, column=self.column)
+        self.row += 2
+
+        self.botaosuporte = tk.Button(text='Contatar Suporte', command=self.chama_suporte)
+        self.botaosuporte.grid(row=self.row, column=self.column)
         self.row += 1
-        
 
         # message
         self.message_label = ttk.Label(self, text='', foreground='red')
-        self.message_label.pack(padx=10,pady=10)
+        self.message_label.grid(row=self.row, column=self.column)
+
+    def chama_suporte(self):
+        self.mensagem('Entre em contato com o email: XXX@XXX.com')
 
     def set_controller(self, controller):
         """
@@ -52,11 +59,10 @@ class MainView(ttk.Frame):
         :return:
         """
         self.controller = controller
-    
-    
+
     def realiza_login(self):
         if self.controller:
-            self.controller.login(matricula=self.matricula_var.get(), senha = self.senha_var.get())
+            self.controller.login(matricula=self.matricula_var.get(), senha=self.senha_var.get())
 
     def show_success(self, message):
         """
@@ -68,18 +74,23 @@ class MainView(ttk.Frame):
         self.message_label['foreground'] = 'green'
         self.message_label.after(3000, self.hide_message)
 
-        #Sumindo com widgets de login
+        # Sumindo com widgets de login
         self.textomatricula.grid_forget()
         self.label[0].grid_forget()
         self.textosenha.grid_forget()
         self.label[1].grid_forget()
         self.botaologin.grid_forget()
-
-        #Chamando view de adm
+        self.botaosuporte.grid_forget()
+        # Chamando view de adm
         self.framelist[0].on_login()
 
-
         self.index = 1
+
+    def mensagem(self, message):
+        self.message_label['text'] = message
+        self.message_label['foreground'] = 'green'
+        self.message_label.after(3000, self.hide_message)
+
     def show_error(self, message):
         """
         Show a success message
@@ -95,10 +106,11 @@ class MainView(ttk.Frame):
         Hide the message
         :return:
         """
-        self.message_label['text'] = ''  
+        self.message_label['text'] = ''
+
+    # Visão do usuário
 
 
-#Visão do usuário
 class ViewUser(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -122,10 +134,10 @@ class ViewUser(ttk.Frame):
         # Data de Nascimento
         self.label6 = ttk.Label(self, text='Data Nascimento:')
         self.label6.grid(row=5, column=0)
-        #Cidade
+        # Cidade
         self.labelcidade = ttk.Label(self, text='Cidade:')
         self.labelcidade.grid(row=6, column=0)
-        #Senha
+        # Senha
         self.labelsenha = ttk.Label(self, text='Senha:')
         self.labelsenha.grid(row=7, column=0)
 
@@ -165,16 +177,16 @@ class ViewUser(ttk.Frame):
         # Cargo
         self.cargo_var = tk.StringVar()
         self.cargo_var_entry = None
-          
+
         # Departamento 
         self.depto_var = tk.StringVar()
         self.depto_var_entry = None
-        
+
         self.last_row = 7
 
         def option_selected(event):
             if self.cargo_var_entry is not None:
-                self.cargo_var_entry.delete(0,'end')
+                self.cargo_var_entry.delete(0, 'end')
                 self.label8.destroy()
                 self.cargo_var_entry.destroy()
                 self.cargo_var_entry = None
@@ -189,68 +201,68 @@ class ViewUser(ttk.Frame):
                 case 'Adm':
                     # Departamento
                     if self.depto_var_entry is None:
-                        #Label
+                        # Label
                         self.label7 = ttk.Label(self, text='Departamento:')
-                        self.label7.grid(row=self.last_row+1, column=0)
-                        #Widget
+                        self.label7.grid(row=self.last_row + 1, column=0)
+                        # Widget
                         self.depto_var_entry = ttk.Entry(self, textvariable=self.depto_var, width=30)
-                        self.depto_var_entry.grid(row=self.last_row+1, column=1)
+                        self.depto_var_entry.grid(row=self.last_row + 1, column=1)
                         self.last_row += 1
                     # Cargo
                     if self.cargo_var_entry is None:
-                        #Label
+                        # Label
                         self.label8 = ttk.Label(self, text='Cargo:')
-                        self.label8.grid(row=self.last_row+1, column=0)
-                        #Widget
+                        self.label8.grid(row=self.last_row + 1, column=0)
+                        # Widget
                         self.cargo_var_entry = ttk.Entry(self, textvariable=self.cargo_var, width=30)
-                        self.cargo_var_entry['state'] = 'normal'   
-                        self.cargo_var_entry.grid(row=self.last_row+1, column=1)
+                        self.cargo_var_entry['state'] = 'normal'
+                        self.cargo_var_entry.grid(row=self.last_row + 1, column=1)
                         self.last_row += 1
                     return 0
                 case 'Funcionario':
                     # Departamento
                     if self.depto_var_entry is None:
-                        #Label
+                        # Label
                         self.label7 = ttk.Label(self, text='Departamento:')
-                        self.label7.grid(row=self.last_row+1, column=0)
-                        #Widget
+                        self.label7.grid(row=self.last_row + 1, column=0)
+                        # Widget
                         self.depto_var_entry = ttk.Entry(self, textvariable=self.depto_var, width=30)
-                        self.depto_var_entry.grid(row=self.last_row+1, column=1)
+                        self.depto_var_entry.grid(row=self.last_row + 1, column=1)
                         self.last_row += 1
                     # Cargo
                     if self.cargo_var_entry is None:
-                        #Label
+                        # Label
                         self.label8 = ttk.Label(self, text='Cargo:')
-                        self.label8.grid(row=self.last_row+1, column=0)
-                        #Widget
+                        self.label8.grid(row=self.last_row + 1, column=0)
+                        # Widget
                         self.cargo_var_entry = ttk.Entry(self, textvariable=self.cargo_var, width=30)
-                        self.cargo_var_entry['state'] = 'normal'   
-                        self.cargo_var_entry.grid(row=self.last_row+1, column=1)
+                        self.cargo_var_entry['state'] = 'normal'
+                        self.cargo_var_entry.grid(row=self.last_row + 1, column=1)
                         self.last_row += 1
                     return 0
                 case 'Atletica':
                     # Departamento
                     if self.depto_var_entry is None:
-                        #Label
+                        # Label
                         self.label7 = ttk.Label(self, text='Departamento:')
-                        self.label7.grid(row=self.last_row+1, column=0)
-                        #Widget
+                        self.label7.grid(row=self.last_row + 1, column=0)
+                        # Widget
                         self.depto_var_entry = ttk.Entry(self, textvariable=self.depto_var, width=30)
-                        self.depto_var_entry.grid(row=self.last_row+1, column=1)
+                        self.depto_var_entry.grid(row=self.last_row + 1, column=1)
                         self.last_row += 1
                     # Cargo = Aluno
                     if self.cargo_var_entry is None:
-                        #Label
+                        # Label
                         self.label8 = ttk.Label(self, text='Cargo:')
-                        self.label8.grid(row=self.last_row+1, column=0)
-                        #Widget
+                        self.label8.grid(row=self.last_row + 1, column=0)
+                        # Widget
                         self.cargo_var_entry = ttk.Entry(self, textvariable=self.cargo_var, width=30)
-                        self.cargo_var_entry.grid(row=self.last_row+1, column=1)
-                        self.cargo_var_entry.delete(0,'end')
-                        self.cargo_var_entry.insert(0,'Aluno')
+                        self.cargo_var_entry.grid(row=self.last_row + 1, column=1)
+                        self.cargo_var_entry.delete(0, 'end')
+                        self.cargo_var_entry.insert(0, 'Aluno')
                         self.cargo_var_entry['state'] = 'readonly'
                         self.last_row += 1
-                    return 0 
+                    return 0
                 case 'Aluno':
                     # Sem Cargo
                     if self.cargo_var_entry is not None:
@@ -258,15 +270,15 @@ class ViewUser(ttk.Frame):
                         self.cargo_var_entry.destroy()
                         self.cargo_var_entry = None
                         self.last_row = self.last_row - 1
-                    #Departamento
+                    # Departamento
                     if self.depto_var_entry is None:
-                        #Label
+                        # Label
                         self.label7 = ttk.Label(self, text='Departamento:')
-                        self.label7.grid(row=self.last_row+1, column=0)
-                        #Widget
+                        self.label7.grid(row=self.last_row + 1, column=0)
+                        # Widget
                         self.depto_var_entry = ttk.Entry(self, textvariable=self.depto_var, width=30)
-                        self.depto_var_entry.grid(row=self.last_row+1, column=1)
-                        self.last_row += 1    
+                        self.depto_var_entry.grid(row=self.last_row + 1, column=1)
+                        self.last_row += 1
                     return 0
                 case 'Comunidade':
                     # Matricula gerada automaticamente
@@ -278,26 +290,25 @@ class ViewUser(ttk.Frame):
                         self.last_row = self.last_row - 1
                     # Cargo
                     if self.cargo_var_entry is None:
-                        #Label
+                        # Label
                         self.label8 = ttk.Label(self, text='Cargo:')
-                        self.label8.grid(row=self.last_row+1, column=0)
-                        #Widget
+                        self.label8.grid(row=self.last_row + 1, column=0)
+                        # Widget
                         self.cargo_var_entry = ttk.Entry(self, textvariable=self.cargo_var, width=30)
-                        self.cargo_var_entry['state'] = 'normal'   
-                        self.cargo_var_entry.grid(row=self.last_row+1, column=1)
-                        self.last_row += 1 
+                        self.cargo_var_entry['state'] = 'normal'
+                        self.cargo_var_entry.grid(row=self.last_row + 1, column=1)
+                        self.last_row += 1
                     return 0
                 case _:
                     print("Valor Errado")
                     return
-        self.tipo_entry.bind("<<ComboboxSelected>>", option_selected) 
 
+        self.tipo_entry.bind("<<ComboboxSelected>>", option_selected)
 
-        #Valores do campo
+        # Valores do campo
         self.tipo_entry['values'] = ['Adm', 'Funcionario', 'Atletica', 'Aluno', 'Comunidade']
-        #Impedir de digitar
+        # Impedir de digitar
         self.tipo_entry['state'] = 'readonly'
-    
 
         # save button
         self.save_button = ttk.Button(self, text='Save', command=self.save_button_clicked)
@@ -309,9 +320,8 @@ class ViewUser(ttk.Frame):
 
         # set the controller
         self.controller = None
-         
-        
-    def gera_matricula():
+
+    def gera_matricula(self):
         print('123')
 
     def set_controller(self, controller):
@@ -321,7 +331,6 @@ class ViewUser(ttk.Frame):
         :return:
         """
         self.controller = controller
-      
 
     def save_button_clicked(self):
         """
@@ -329,7 +338,11 @@ class ViewUser(ttk.Frame):
         :return:
         """
         if self.controller:
-            self.controller.saveuser(nome = self.nome_var.get(), matricula = self.matricula_var.get(), tipo = self.tipo_var.get(), email = self.email_var.get(), cargo = self.cargo_var.get(), telefone = self.telefone_var.get(), data_nascimento = self.data_nascimento_var.get(), cidade = self.cidade_var.get(), departamento = self.depto_var.get(), senha = self.senha_var.get())
+            self.controller.saveuser(nome=self.nome_var.get(), matricula=self.matricula_var.get(),
+                                     tipo=self.tipo_var.get(), email=self.email_var.get(), cargo=self.cargo_var.get(),
+                                     telefone=self.telefone_var.get(), data_nascimento=self.data_nascimento_var.get(),
+                                     cidade=self.cidade_var.get(), departamento=self.depto_var.get(),
+                                     senha=self.senha_var.get())
 
     def show_error(self, message):
         """
@@ -358,7 +371,7 @@ class ViewUser(ttk.Frame):
 
         self.matricula_entry['foreground'] = 'black'
         self.matricula_var.set('')
-        
+
         self.tipo_entry['foreground'] = 'black'
         self.tipo_var.set('')
 
@@ -376,27 +389,26 @@ class ViewUser(ttk.Frame):
 
         self.data_nascimento_var_entry['foreground'] = 'black'
         self.data_nascimento_var.set('')
-        if  self.cargo_var_entry is not None:
+        if self.cargo_var_entry is not None:
             self.cargo_var_entry['foreground'] = 'black'
             self.cargo_var.set('')
-        if  self.depto_var_entry is not None:
+        if self.depto_var_entry is not None:
             self.depto_var_entry['foreground'] = 'black'
             self.depto_var.set('')
-
-
 
     def hide_message(self):
         """
         Hide the message
         :return:
         """
-        self.message_label['text'] = ''  
+        self.message_label['text'] = ''
+
 
 class ViewQuadra(ttk.Frame):
 
     def __init__(self, parent):
         super().__init__(parent)
-        #Dicionario de posiçoes de coluna
+        # Dicionario de posiçoes de coluna
         self.griddict = {'nome': 1, 'local': 2, 'capacidade': 3, 'horario_disp': 4, 'horario_limp': 5, 'last': 6}
         nome = self.griddict['nome']
         local = self.griddict['local']
@@ -404,7 +416,7 @@ class ViewQuadra(ttk.Frame):
         horario_disp = self.griddict['horario_disp']
         horario_limp = self.griddict['horario_limp']
         last = self.griddict['last']
-        
+
         # Labels
         self.labelnome = ttk.Label(self, text='Nome da Quadra:')
         self.labelnome.grid(row=nome, column=0)
@@ -415,7 +427,7 @@ class ViewQuadra(ttk.Frame):
         self.labelnome = ttk.Label(self, text='Horario Disponivel:')
         self.labelnome.grid(row=horario_disp, column=0)
         self.labelnome = ttk.Label(self, text='Horario de Limpeza:')
-        self.labelnome.grid(row=horario_limp,column=0)
+        self.labelnome.grid(row=horario_limp, column=0)
 
         # Nome
         self.nome_var = tk.StringVar()
@@ -463,7 +475,9 @@ class ViewQuadra(ttk.Frame):
         :return:
         """
         if self.controller:
-            self.controller.savequadra(nome = self.nome_var.get(), local = self.local_var.get(), capacidade = self.capacidade_var.get(), horario_limp = self.horario_limp_var.get(), horario_disp = self.horario_disp_var.get())
+            self.controller.savequadra(nome=self.nome_var.get(), local=self.local_var.get(),
+                                       capacidade=self.capacidade_var.get(), horario_limp=self.horario_limp_var.get(),
+                                       horario_disp=self.horario_disp_var.get())
 
     def show_error(self, message):
         """
@@ -474,7 +488,6 @@ class ViewQuadra(ttk.Frame):
         self.message_label['text'] = message
         self.message_label['foreground'] = 'red'
         self.message_label.after(3000, self.hide_message)
-        self.email_entry['foreground'] = 'red'
 
     def show_success(self, message):
         """
@@ -488,33 +501,37 @@ class ViewQuadra(ttk.Frame):
 
         # Resetar formulario
 
-        #Nome
+        # Nome
         self.nome_entry['foreground'] = 'black'
         self.nome_var.set('')
-        #Local
+        # Local
         self.local_entry['foreground'] = 'black'
         self.local_var.set('')
-        #Capacidade
+        # Capacidade
         self.capacidade_entry['foreground'] = 'black'
         self.capacidade_var.set('')
-        #Horario Disponivel
+        # Horario Disponivel
         self.horario_disp_entry['foreground'] = 'black'
         self.horario_disp_var.set('')
-        #Horario Limpeza
+        # Horario Limpeza
         self.horario_limp_entry['foreground'] = 'black'
         self.horario_limp_var.set('')
-       
+
     def hide_message(self):
         """
         Hide the message
         :return:
         """
-        self.message_label['text'] = ''  
+        self.message_label['text'] = ''
+
 
 class GerenciaUser(ttk.Frame):
-    #Pegar os usuarios!!! nome e matricula
+    # Pegar os usuarios!!! nome e matricula
     def __init__(self, parent):
         super().__init__(parent)
+        self.nome = None
+        self.label6 = None
+        self.labelcidade = None
         self.called = False
         self.deletebtns = []
         self.editbtns = []
@@ -528,24 +545,30 @@ class GerenciaUser(ttk.Frame):
         self.labelnome[index].grid_forget()
         self.labelmatricula[index].grid_forget()
 
-    def deletewidget(self,widget):
+    def deletewidget(self, widget):
         for i in widget:
             i.grid_forget()
-    
+
     def raisewidget(widget, row, column):
         for i in widget:
-            i.grid(row=row,column=column,sticky=tk.NS)
-         
+            i.grid(row=row, column=column, sticky=tk.NS)
+
     def deletewidgets(self, widget):
         for i in range(len(widget)):
             widget[i].grid_forget()
 
     def raisewidgets(self, widget, column):
         for i in range(len(widget)):
-            widget[i].grid(row=i+1,column=column,sticky=tk.NS)
+            widget[i].grid(row=i + 1, column=column, sticky=tk.NS)
 
-    def drawviewedit(self):
-        # -- LABELS -- 
+    def drawviewedit(self, user):
+
+        def onsaveclick():
+            alteracoes = [self.nome_var, self.matricula_var, self.tipo_var, self.email_var, self.telefone_var,
+                          self.data_nascimento_var, self.cidade_var, self.senha_var, self.cargo_var, self.depto_var]
+            self.controller.edituser(user, alteracoes)
+
+        # -- LABELS --
         # Nome
         self.label1 = ttk.Label(self, text='Nome:')
         self.label1.grid(row=0, column=0)
@@ -564,16 +587,16 @@ class GerenciaUser(ttk.Frame):
         # Data de Nascimento
         self.label6 = ttk.Label(self, text='Data Nascimento:')
         self.label6.grid(row=5, column=0)
-        #Cidade
+        # Cidade
         self.labelcidade = ttk.Label(self, text='Cidade:')
         self.labelcidade.grid(row=6, column=0)
-        #Senha
+        # Senha
         self.labelsenha = ttk.Label(self, text='Senha:')
         self.labelsenha.grid(row=7, column=0)
-        #Cargo
+        # Cargo
         self.labelcargo = ttk.Label(self, text='Cargo:')
         self.labelcargo.grid(row=8, column=0)
-        #Departamento
+        # Departamento
         self.labeldepto = ttk.Label(self, text='Departamento:')
         self.labeldepto.grid(row=9, column=0)
 
@@ -590,9 +613,9 @@ class GerenciaUser(ttk.Frame):
         self.tipo_var = tk.StringVar()
         self.tipo_entry = ttk.Combobox(self, textvariable=self.tipo_var, width=25)
         self.tipo_entry.grid(row=2, column=1)
-        #Valores do campo
+        # Valores do campo
         self.tipo_entry['values'] = ['Adm', 'Funcionario', 'Atletica', 'Aluno', 'Comunidade']
-        #Impedir de digitar
+        # Impedir de digitar
         self.tipo_entry['state'] = 'readonly'
         # Email
         self.email_var = tk.StringVar()
@@ -616,50 +639,50 @@ class GerenciaUser(ttk.Frame):
         self.senha_entry.grid(row=7, column=1)
         # Cargo
         self.cargo_var = tk.StringVar()
-        self.cargo_var = ttk.Entry(self, textvariable=self.senha_var, width=30)
+        self.cargo_var = ttk.Entry(self, textvariable=self.cargo_var, width=30)
         self.cargo_var.grid(row=8, column=1)
         # Departamento 
         self.depto_var = tk.StringVar()
-        self.depto_var = ttk.Entry(self, textvariable=self.senha_var, width=30)
+        self.depto_var = ttk.Entry(self, textvariable=self.depto_var, width=30)
         self.depto_var.grid(row=9, column=1)
-        
-        self.save_button = ttk.Button(self, text='Save')
+
+        self.save_button = ttk.Button(self, text='Save', command=onsaveclick)
         self.save_button.grid(row=1, column=2, padx=10)
 
     def edituser(self, user, index):
-            list = [self.deletebtns,self.editbtns,self.labelnome,self.labelmatricula]
-            list2 = [self.nome, self.matricula]
-            for i in list:
-                self.deletewidgets(i)
-                self.deletewidget(list2)
-            self.drawviewedit()
-            self.controller.edituser(user)
-            #Reconstroi
-            
-            
+        list = [self.deletebtns, self.editbtns, self.labelnome, self.labelmatricula]
+        list2 = [self.nome, self.matricula]
+        for i in list:
+            self.deletewidgets(i)
+            self.deletewidget(list2)
+        self.drawviewedit(user)
+
+        # Reconstroi
 
     def mostrausers(self):
         usuarios = self.controller.retornauser()
         self.nome = ttk.Label(self, text='Nome:')
         self.matricula = ttk.Label(self, text='Matricula:')
-        self.nome.grid(row=0, column=0,sticky=tk.EW)
-        self.matricula.grid(row=0, column=1,sticky=tk.EW)
+        self.nome.grid(row=0, column=0, sticky=tk.EW)
+        self.matricula.grid(row=0, column=1, sticky=tk.EW)
         row = 1
         index = 0
-        
+
         if not self.called:
             for x in usuarios:
-                self.deletebtns.append(ttk.Button(self, text='Delete',command= lambda x=x,index=index: self.deleteuser(x[1],index)))
-                self.editbtns.append(ttk.Button(self, text='Edit',command= lambda x=x,index=index: self.edituser(x[1],index))) 
+                self.deletebtns.append(
+                    ttk.Button(self, text='Delete', command=lambda x=x, index=index: self.deleteuser(x[1], index)))
+                self.editbtns.append(
+                    ttk.Button(self, text='Edit', command=lambda x=x, index=index: self.edituser(x[1], index)))
 
-                self.labelnome.append(ttk.Label(self, text= f'{x[0]}'))
-                self.labelmatricula.append(ttk.Label(self, text= f'{x[1]}'))
+                self.labelnome.append(ttk.Label(self, text=f'{x[0]}'))
+                self.labelmatricula.append(ttk.Label(self, text=f'{x[1]}'))
 
                 self.labelnome[index].grid(row=row, column=0, sticky=tk.NS)
                 self.labelmatricula[index].grid(row=row, column=1, sticky=tk.NS)
-                
-                self.editbtns[index].grid(row=row, column=2,sticky=tk.NS)
-                self.deletebtns[index].grid(row=row, column=3,sticky=tk.NS)
+
+                self.editbtns[index].grid(row=row, column=2, sticky=tk.NS)
+                self.deletebtns[index].grid(row=row, column=3, sticky=tk.NS)
                 index += 1
                 row += 1
         self.called = True
@@ -667,27 +690,157 @@ class GerenciaUser(ttk.Frame):
     def set_controller(self, controller):
         self.controller = controller
 
+
+class GerenciaQuadra(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.called = False
+        self.deletebtns = []
+        self.editbtns = []
+        self.labelnome = []
+        self.labelmatricula = []
+
+    def deletequadra(self, quadra, index):
+        self.controller.deletequadra(quadra)
+        self.deletebtns[index].grid_forget()
+        self.editbtns[index].grid_forget()
+        self.labelnome[index].grid_forget()
+        self.labelmatricula[index].grid_forget()
+
+    def deletewidget(self, widget):
+        for i in widget:
+            i.grid_forget()
+
+    def raisewidget(widget, row, column):
+        for i in widget:
+            i.grid(row=row, column=column, sticky=tk.NS)
+
+    def deletewidgets(self, widget):
+        for i in range(len(widget)):
+            widget[i].grid_forget()
+
+    def raisewidgets(self, widget, column):
+        for i in range(len(widget)):
+            widget[i].grid(row=i + 1, column=column, sticky=tk.NS)
+
+    def drawviewedit(self, quadra):
+
+        def onsaveclick():
+            alteracoes = [self.nome_var, self.local_var, self.capacidade_var, self.horario_disp_var,
+                          self.horario_limp_var]
+            self.controller.editquadra(quadra, alteracoes)
+        # Dicionario de posiçoes de coluna
+        self.griddict = {'nome': 1, 'local': 2, 'capacidade': 3, 'horario_disp': 4, 'horario_limp': 5, 'last': 6}
+        nome = self.griddict['nome']
+        local = self.griddict['local']
+        capacidade = self.griddict['capacidade']
+        horario_disp = self.griddict['horario_disp']
+        horario_limp = self.griddict['horario_limp']
+        last = self.griddict['last']
+        # Labels
+        self.labelnome = ttk.Label(self, text='Nome da Quadra:')
+        self.labelnome.grid(row=nome, column=0)
+        self.labelnome = ttk.Label(self, text='Local:')
+        self.labelnome.grid(row=local, column=0)
+        self.labelnome = ttk.Label(self, text='Capacidade:')
+        self.labelnome.grid(row=capacidade, column=0)
+        self.labelnome = ttk.Label(self, text='Horario Disponivel:')
+        self.labelnome.grid(row=horario_disp, column=0)
+        self.labelnome = ttk.Label(self, text='Horario de Limpeza:')
+        self.labelnome.grid(row=horario_limp, column=0)
+
+        # Nome
+        self.nome_var = tk.StringVar()
+        self.nome_entry = ttk.Entry(self, textvariable=self.nome_var, width=30)
+        self.nome_entry.grid(row=nome, column=1)
+        # Local
+        self.local_var = tk.StringVar()
+        self.local_entry = ttk.Entry(self, textvariable=self.local_var, width=30)
+        self.local_entry.grid(row=local, column=1)
+        # Capacidade
+        self.capacidade_var = tk.StringVar()
+        self.capacidade_entry = ttk.Entry(self, textvariable=self.capacidade_var, width=30)
+        self.capacidade_entry.grid(row=capacidade, column=1)
+        # Horario Disponivel
+        self.horario_disp_var = tk.StringVar()
+        self.horario_disp_entry = ttk.Entry(self, textvariable=self.horario_disp_var, width=30)
+        self.horario_disp_entry.grid(row=horario_disp, column=1)
+        # Horario Limpeza
+        self.horario_limp_var = tk.StringVar()
+        self.horario_limp_entry = ttk.Entry(self, textvariable=self.horario_limp_var, width=30)
+        self.horario_limp_entry.grid(row=horario_limp, column=1)
+
+        # save button
+        self.save_button = ttk.Button(self, text='Save', command=onsaveclick)
+        self.save_button.grid(row=1, column=3, padx=10)
+
+
+
+    def editquadra(self, quadra, index):
+        list = [self.deletebtns, self.editbtns, self.labelnome, self.labelmatricula]
+        list2 = [self.nome, self.matricula]
+        for i in list:
+            self.deletewidgets(i)
+            self.deletewidget(list2)
+        self.drawviewedit(quadra)
+
+    def mostraquadra(self):
+        usuarios = self.controller.retornaquadra()
+        self.nome = ttk.Label(self, text='Nome:')
+        self.matricula = ttk.Label(self, text='Local:')
+        self.nome.grid(row=0, column=0, sticky=tk.EW)
+        self.matricula.grid(row=0, column=1, sticky=tk.EW)
+        row = 1
+        index = 0
+
+        if not self.called:
+            for x in usuarios:
+                self.deletebtns.append(
+                    ttk.Button(self, text='Delete', command=lambda x=x, index=index: self.deletequadra(x[0], index)))
+                self.editbtns.append(
+                    ttk.Button(self, text='Edit', command=lambda x=x, index=index: self.editquadra(x[0], index)))
+
+                self.labelnome.append(ttk.Label(self, text=f'{x[1]}'))
+                self.labelmatricula.append(ttk.Label(self, text=f'{x[2]}'))
+
+                self.labelnome[index].grid(row=row, column=0, sticky=tk.NS)
+                self.labelmatricula[index].grid(row=row, column=1, sticky=tk.NS)
+
+                self.editbtns[index].grid(row=row, column=2, sticky=tk.NS)
+                self.deletebtns[index].grid(row=row, column=3, sticky=tk.NS)
+                index += 1
+                row += 1
+        self.called = True
+
+    def set_controller(self, controller):
+        self.controller = controller
+
+
 class AdmView(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
-    #Criar Usuario
+        # Criar Usuario
+        self.controller = None
         user = ViewUser(parent=parent)
-    #Criar Quadra
+        # Criar Quadra
         quadra = ViewQuadra(parent=parent)
-    #Gerenciar Usuario
+        # Gerenciar Usuario
         gerenciauser = GerenciaUser(parent=parent)
-        self.framelist = [user, quadra, gerenciauser]
-        
-        self.criauser = tk.Button(text='Criar Usuário', command = self.tela_user)
-        self.criaquadra = tk.Button(text='Criar Quadra', command = self.tela_quadra)
-        self.gerenciauser = tk.Button(text='Gerenciar Usuario', command = self.tela_gerenciamento)
+        gerenciaquadra = GerenciaQuadra(parent=parent)
+        self.framelist = [user, quadra, gerenciauser, gerenciaquadra]
+
+        self.criauser = tk.Button(text='Criar Usuário', command=self.tela_user)
+        self.criaquadra = tk.Button(text='Criar Quadra', command=self.tela_quadra)
+        self.gerenciauser = tk.Button(text='Gerenciar Usuario', command=self.tela_gerenciamentouser)
+        self.gerenciaquadra = tk.Button(text='Gerenciar Quadra', command=self.tela_gerenciamentoquadra)
         self.index = -1
+
     def tela_user(self):
         if self.index != 0:
             for i in range(len(self.framelist)):
                 self.framelist[i].grid_forget()
         self.framelist[0].tkraise()
-        self.framelist[0].grid(row = 1, column = 0, pady = 20)
+        self.framelist[0].grid(row=1, column=0, pady=20)
         self.index = 0
 
     def tela_quadra(self):
@@ -695,57 +848,64 @@ class AdmView(ttk.Frame):
             for i in range(len(self.framelist)):
                 self.framelist[i].grid_forget()
         self.framelist[1].tkraise()
-        self.framelist[1].grid(row=1, column = 1, pady = 20)
+        self.framelist[1].grid(row=1, column=1, pady=20)
         self.index = 1
-    
-    def tela_gerenciamento(self):
+
+    def tela_gerenciamentouser(self):
         if self.index != 2:
             for i in range(len(self.framelist)):
                 self.framelist[i].grid_forget()
         self.framelist[2].mostrausers()
         self.framelist[2].tkraise()
-        self.framelist[2].grid(row=1, column = 2, pady = 20)
+        self.framelist[2].grid(row=1, column=2, pady=20)
         self.index = 2
-    
+
+    def tela_gerenciamentoquadra(self):
+        if self.index != 3:
+            for i in range(len(self.framelist)):
+                self.framelist[i].grid_forget()
+        self.framelist[3].mostraquadra()
+        self.framelist[3].tkraise()
+        self.framelist[3].grid(row=1, column=3, pady=20)
+        self.index = 3
+
     def on_login(self):
+        self.gerenciaquadra.grid(row=0, column=3, sticky=tk.EW)
         self.gerenciauser.grid(row=0, column=2, sticky=tk.EW)
         self.criaquadra.grid(row=0, column=1, sticky=tk.EW)
         self.criauser.grid(row=0, column=0, sticky=tk.EW)
-        
-    #Gerenciar Reserva
-    #reserva = ViewReserva()
-    #Registrar punição
-    #punicao = ViewPunicao
-    #Analisar recurso
-    #Visualizar estatisticas
-    #Gerenciar Usuarios
-    #gerenciauser = ViewUserGerencia()
-    #Gerenciar Equipamentos
-    #gerenciaequip = ViewEquipamento()
 
-    #Controlador
+    # Gerenciar Reserva
+    # reserva = ViewReserva()
+    # Registrar punição
+    # punicao = ViewPunicao
+    # Analisar recurso
+    # Visualizar estatisticas
+    # Gerenciar Usuarios
+    # gerenciauser = ViewUserGerencia()
+    # Gerenciar Equipamentos
+    # gerenciaequip = ViewEquipamento()
+
+    # Controlador
     def set_controller(self, controller):
         self.controller = controller
         for x in self.framelist:
             x.set_controller(controller)
 
-class GeralView(ttk.Frame):
+
+class GeralView:
     def __init__(self, parent):
         super().__init__(parent)
-
         # Adicione os widgets para a criação e visualização de reserva de quadra aqui
-
         self.criar_reserva_button = ttk.Button(self, text='Criar Reserva', command=self.criar_reserva)
         self.criar_reserva_button.grid(row=0, column=0, padx=10, pady=10)
-
         self.visualizar_reserva_button = ttk.Button(self, text='Visualizar Reserva', command=self.visualizar_reserva)
         self.visualizar_reserva_button.grid(row=1, column=0, padx=10, pady=10)
 
-   def criar_reserva(self):
+    def criar_reserva(self):
         nova_janela = tk.Toplevel(self)
         nova_janela.title('Criar Reserva')
-
-        # Adicione os widgets para a criação de reserva aqui
+    # Adicione os widgets para a criação de reserva aqui
         label_quadras = ttk.Label(nova_janela, text='Selecione a Quadra:')
         label_quadras.grid(row=0, column=0, padx=10, pady=10)
 
@@ -766,8 +926,8 @@ class GeralView(ttk.Frame):
 
         botao_criar_reserva = ttk.Button(nova_janela, text='Criar Reserva', command=self.criar_reserva_quadra)
         botao_criar_reserva.grid(row=3, column=0, columnspan=2, pady=10)
-
-    def visualizar_reserva(self):
+    
+    def visualizar_reserva(self, reservaid):
         dados_reserva = self.controller.visualizarReserva(reservaid)
 
         if dados_reserva:
