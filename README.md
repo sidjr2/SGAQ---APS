@@ -23,7 +23,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ## 💻 Projeto
 
-O Sistema de Gerenciamento de Alocação de Quadra (SGAQ) é uma plataforma web desenvolvida para otimizar o processo de reserva e utilização da quadra esportiva do Centro de Tecnologia da Universidade Federal de São João del-Rei (UFSJ). O software oferece funcionalidades de reserva de horários, gerenciamento de equipamentos, registro de presença. Ele é destinado a diferentes perfis de usuários, como professores, atléticas, funcionários e comunidade em geral. 💰
+O Sistema de Gerenciamento de Alocação de Quadra (SGAQ) é uma sistema desevolvido em python com mysql buscando otimizar o processo de reserva e utilização da quadra esportiva da Universidade Federal de São João del-Rei (UFSJ). O software oferece funcionalidades de reserva de horários, gerenciamento de equipamentos, registro de presença. Ele é destinado a diferentes perfis de usuários, como professores, atléticas, funcionários e comunidade em geral. 💰
 
 ## 🔖 Layout
 
@@ -35,4 +35,4 @@ Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](.github/LICENSE.
 
 ---
 
-Feito com ♥ by Davi K, Gustavo D, Leandro S., Matheus N., Sidney Jr :wave:
+Feito com ♥ by Davi Kreppel, Gustavo Detomi, Leandro Souza, Matheus Nascimento e Sidney Junior. :wave:
