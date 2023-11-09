@@ -27,43 +27,40 @@ O Sistema de Gerenciamento de Alocação de Quadra (SGAQ) é uma sistema desevol
 
 ## 🔖 Layout
 
-## Tela de Login
+### Tela de Login
 
 ![Tela de Login](img/telalogin.png)
 
 *Legenda: Interface de login para acesso ao sistema.*
 
 
-## Tela de Criar Quadra
+### Tela de Criar Quadra
 
 ![Quadra](img/criarquadra.png)
 
 *Legenda: Página de criação da quadra do projeto.*
 
 
-## Editar Usuário
+### Editar Usuário
 
 ![Editar Usuário](img/editarusuario.png)
 
 *Legenda: Página de edição de perfil do usuário.*
 
 
-
-## Criar Usuário
+### Criar Usuário
 
 ![Criar Usuário](img/criarusuario.png)
 
 *Legenda: Formulário para criar um novo usuário no sistema.*
 
 
-
-## Gerenciar Usuário
+### Gerenciar Usuário
 
 ![Gerenciar Usuário](img/gerenciarusuario.png)
 
 *Legenda: Página de gerenciamento de usuários, exibindo uma lista e opções de administração.*
 
----
 
 ## :memo: Licença
 
