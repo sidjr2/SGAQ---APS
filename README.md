@@ -33,7 +33,6 @@ O Sistema de Gerenciamento de Alocação de Quadra (SGAQ) é uma sistema desevol
 
 *Legenda: Interface de login para acesso ao sistema.*
 
----
 
 ## Tela de Criar Quadra
 
@@ -41,7 +40,6 @@ O Sistema de Gerenciamento de Alocação de Quadra (SGAQ) é uma sistema desevol
 
 *Legenda: Página de criação da quadra do projeto.*
 
----
 
 ## Editar Usuário
 
@@ -49,7 +47,7 @@ O Sistema de Gerenciamento de Alocação de Quadra (SGAQ) é uma sistema desevol
 
 *Legenda: Página de edição de perfil do usuário.*
 
----
+
 
 ## Criar Usuário
 
@@ -57,7 +55,7 @@ O Sistema de Gerenciamento de Alocação de Quadra (SGAQ) é uma sistema desevol
 
 *Legenda: Formulário para criar um novo usuário no sistema.*
 
----
+
 
 ## Gerenciar Usuário
 
