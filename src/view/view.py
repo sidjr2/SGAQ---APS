@@ -6,13 +6,13 @@ import copy
 # Menu principal
 
 class MainView(ttk.Frame):
-    def __init__(self, master, adm):
+    def __init__(self, master, adm, geral):
         super().__init__(master)
         self.index = 0
         self.mainframe = ttk.Frame(master)
         self.mainframe.grid(padx=10, pady=10)
 
-        self.framelist = [adm]
+        self.framelist = [adm, geral]
         labels = ['Matricula', 'Senha']
         self.label = []
         self.entry = 2
@@ -74,6 +74,7 @@ class MainView(ttk.Frame):
         self.message_label['foreground'] = 'green'
         self.message_label.after(3000, self.hide_message)
 
+    def show_login(self, tipo):
         # Sumindo com widgets de login
         self.textomatricula.grid_forget()
         self.label[0].grid_forget()
@@ -82,7 +83,12 @@ class MainView(ttk.Frame):
         self.botaologin.grid_forget()
         self.botaosuporte.grid_forget()
         # Chamando view de adm
-        self.framelist[0].on_login()
+        if tipo == 'Adm':
+            self.framelist[0].on_login()
+        else:
+        #Chamando view de geral
+            self.framelist[1].on_login()
+        
 
         self.index = 1
 
@@ -893,14 +899,18 @@ class AdmView(ttk.Frame):
             x.set_controller(controller)
 
 
-class GeralView:
+class GeralView(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
         # Adicione os widgets para a criação e visualização de reserva de quadra aqui
-        self.criar_reserva_button = ttk.Button(self, text='Criar Reserva', command=self.criar_reserva)
-        self.criar_reserva_button.grid(row=0, column=0, padx=10, pady=10)
-        self.visualizar_reserva_button = ttk.Button(self, text='Visualizar Reserva', command=self.visualizar_reserva)
-        self.visualizar_reserva_button.grid(row=1, column=0, padx=10, pady=10)
+        self.criar_reserva_button = ttk.Button(parent, text='Criar Reserva', command=self.criar_reserva)
+        self.visualizar_reserva_button = ttk.Button(parent, text='Visualizar Reserva', command=self.visualizar_reserva)
+        
+       
+
+    def on_login(self):
+        self.criar_reserva_button.grid(row=0, column=0)
+        self.visualizar_reserva_button.grid(row=0, column=1)
 
     def criar_reserva(self):
         nova_janela = tk.Toplevel(self)

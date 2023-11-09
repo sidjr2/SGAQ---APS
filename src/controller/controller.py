@@ -38,9 +38,10 @@ class ControllerMenu:
         self.view = view
 
     def login(self, matricula, senha):
-         resultado = self.model.RealizaLogin(matricula=matricula, senha=senha)
+         resultado, tipo = self.model.RealizaLogin(matricula=matricula, senha=senha)
          if resultado:
               self.view.show_success('Login feito com sucesso!')
+              self.view.show_login(tipo)
          else:
               self.view.show_error('Os dados de matrícula ou senha fornecidos são inválidos.')
 

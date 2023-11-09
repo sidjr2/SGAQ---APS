@@ -60,12 +60,12 @@ class Model:
         mydb.commit()
 
     def RealizaLogin(self, matricula, senha):
-        mycursor.execute('SELECT matricula, senha FROM usuarios')
+        mycursor.execute('SELECT matricula, senha, tipo FROM usuarios')
         resultados = mycursor.fetchall()
         for x in resultados:
             if x[0] == matricula and x[1] == senha:
-                return True
-        return False
+                return True, x[2]
+        return False, None
 
     def retornaUser(self):
         mycursor.execute('SELECT nome, matricula FROM usuarios')

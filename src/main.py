@@ -19,7 +19,7 @@ class App(tk.Tk):
         # Criando as views
         geralview = GeralView(self) 
         admview = AdmView(self)
-        view = MainView(self, admview)
+        view = MainView(self, admview, geralview)
         # Criando os controladores
         controlleradm = ControllerAdm(model, view)
         controllermenu = ControllerMenu(model, view)
