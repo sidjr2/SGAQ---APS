@@ -1,16 +1,5 @@
 import re
 from typing import Any
-import mysql.connector.cursor
-
-mydb = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="DarknessKD1.",
-            database="pytest"
-        )   
-mycursor = mydb.cursor()
-
-
 
 class User:
     def __init__(self, userid, nome, tipo, matricula, email, cargo, telefone, data_nascimento, cidade, departamento, senha):
@@ -40,33 +29,24 @@ class Quadra:
 
 
 class Model:
-       
+    def __init__(self):
+        self.users = []
+        self.quadras = []
+        self.userid = 0
+        self.quadraid = 0
     def criaUser(self, nome, matricula, tipo, email, cargo, telefone , data_nascimento, cidade, departamento, senha):
-        sql = "INSERT INTO usuarios (nome, tipo, matricula, email, cargo, telefone, data_nascimento, cidade, departamento, senha) VALUES (%s, %s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        val = (f"{nome}", f"{tipo}",f"{matricula}",f"{email}",f"{cargo}",f"{telefone}",f"{data_nascimento}",f"{cidade}",f"{departamento}",f"{senha}")
-        mycursor.execute(sql, val)
-        mydb.commit()
+        user = User(userid = self.userid, nome = nome, matricula = matricula, tipo = tipo, email=email,cargo=cargo,telefone=telefone,data_nascimento=data_nascimento, cidade = cidade, departamento = departamento, senha = senha)
+        self.users.append(user)
+    
+        with open('users.txt', 'a') as f:
+            f.write(f'{str(self.userid)}, {user.nome}, {user.matricula}, {user.tipo}, {user.email}, {user.cargo}, {user.telefone}, {user.data_nascimento}\n')
+
+        self.userid += 1
 
     def criaQuadra(self, local, nome, horario_limp, horario_disp, capacidade):
-        sql = "INSERT INTO quadras (nome, local, capacidade, horario_disponivel, horario_limpeza) VALUES (%s, %s, %s, %s, %s)"
-        val = (f"{nome}", f"{local}",f"{capacidade}",f"{horario_disp}",f"{horario_limp}")
-        mycursor.execute(sql, val)
-        mydb.commit()
+        quadra = Quadra(quadraid = self.quadraid, local = local, horario_limpeza = horario_limp, horario_disponivel = horario_disp, nome = nome,capacidade=capacidade)
+        self.quadras.append(quadra)
+        with open('quadra.txt', 'a') as f:
+            f.write(f'{str(self.quadraid)}, {nome}, {local}, {capacidade}, {horario_disp}, {horario_limp}')
 
-    def RealizaLogin(self, matricula, senha):
-        mycursor.execute('SELECT matricula, senha FROM usuarios')
-        resultados = mycursor.fetchall()
-        for x in resultados:
-            if x[0] == matricula and x[1] == senha:
-                return True
-        return False
-    
-    def retornaUser(self):
-        mycursor.execute('SELECT nome, matricula FROM usuarios')
-        resultados = mycursor.fetchall()
-        return resultados
-    
-    def deleteUser(self, matricula):
-        mycursor.execute(f"DELETE FROM usuarios WHERE matricula = '{matricula}'")
-        mydb.commit()
-
+        self.quadraid += 1
