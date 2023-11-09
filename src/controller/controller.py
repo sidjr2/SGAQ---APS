@@ -76,3 +76,16 @@ class ControllerAdm:
          self.model.deleteUser(matricula)
     def edituser(self,matricula):
          print('here')
+
+class ControllerReserva:
+    def __init__(self, model, view):
+          self.model = model
+          self.view = view
+
+    def savereserva(self, reservaId, quadraid, usuarioId, data, hora):
+                
+        self.model.criaReserva(reservaId=reservaId,quadraid=quadraid,usuarioId=usuarioId,data=data, hora = hora)
+                
+        self.view.show_success(f'Reserva: {reservaId}, Local:{quadraid}, Capacidade: {usuarioId},Data:{data}, Horario: {hora}')
+    def visualizarReserva(self, reservaId):
+         self.model.visualizarReserva(reservaId)

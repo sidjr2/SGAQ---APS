@@ -741,15 +741,50 @@ class GeralView(ttk.Frame):
         self.visualizar_reserva_button = ttk.Button(self, text='Visualizar Reserva', command=self.visualizar_reserva)
         self.visualizar_reserva_button.grid(row=1, column=0, padx=10, pady=10)
 
-    def criar_reserva(self):
-        # Implemente a lógica para criar uma reserva de quadra aqui
+   def criar_reserva(self):
         nova_janela = tk.Toplevel(self)
         nova_janela.title('Criar Reserva')
-        pass
+
+        # Adicione os widgets para a criação de reserva aqui
+        label_quadras = ttk.Label(nova_janela, text='Selecione a Quadra:')
+        label_quadras.grid(row=0, column=0, padx=10, pady=10)
+
+        # Exemplo de ComboBox com quadras (substitua com sua lista de quadras)
+        quadras = ['Quadra 1', 'Quadra 2', 'Quadra 3']
+        select_quadras = ttk.Combobox(nova_janela, values=quadras)
+        select_quadras.grid(row=0, column=1, padx=10, pady=10)
+
+        label_data = ttk.Label(nova_janela, text='Data:')
+        label_data.grid(row=1, column=0, padx=10, pady=10)
+        entry_data = ttk.Entry(nova_janela)
+        entry_data.grid(row=1, column=1, padx=10, pady=10)
+
+        label_hora = ttk.Label(nova_janela, text='Hora:')
+        label_hora.grid(row=2, column=0, padx=10, pady=10)
+        entry_hora = ttk.Entry(nova_janela)
+        entry_hora.grid(row=2, column=1, padx=10, pady=10)
+
+        botao_criar_reserva = ttk.Button(nova_janela, text='Criar Reserva', command=self.criar_reserva_quadra)
+        botao_criar_reserva.grid(row=3, column=0, columnspan=2, pady=10)
 
     def visualizar_reserva(self):
-        # Implemente a lógica para visualizar a reserva de quadra aqui
-        pass
+        dados_reserva = self.controller.visualizarReserva(reservaid)
+
+        if dados_reserva:
+            nova_janela = tk.Toplevel(self)
+            nova_janela.title('Visualizar Reserva')
+
+            label_nome_usuario = ttk.Label(nova_janela, text=f'Nome do Usuário: {dados_reserva[0]["nome_usuario"]}')
+            label_nome_usuario.pack(pady=10)
+
+            label_quadra = ttk.Label(nova_janela, text=f'Quadra: {dados_reserva[0]["nome_quadra"]}')
+            label_quadra.pack(pady=10)
+
+            label_data = ttk.Label(nova_janela, text=f'Data: {dados_reserva[0]["data"]}')
+            label_data.pack(pady=10)
+
+            label_hora = ttk.Label(nova_janela, text=f'Hora: {dados_reserva[0]["hora"]}')
+            label_hora.pack(pady=10)
 
 class ProfView:
     print('ProfView')
