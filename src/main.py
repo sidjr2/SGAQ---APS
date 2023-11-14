@@ -15,7 +15,8 @@ class App(tk.Tk):
 
         # Cria o modelo
         model = Model()
-
+        quadra = Quadra()
+        user = User()
         # Criando as views
         geralview = GeralView(self) 
         admview = AdmView(self)
@@ -23,9 +24,11 @@ class App(tk.Tk):
         # Criando os controladores
         controlleradm = ControllerAdm(model, view)
         controllermenu = ControllerMenu(model, view)
+        controllergeral = ControllerGeral(quadra, model, view)
         # Seta os controladores nas views
         admview.set_controller(controlleradm)
         view.set_controller(controllermenu)
+        geralview.set_controller(controllergeral)
 
         # Desenha a view
         view.grid()

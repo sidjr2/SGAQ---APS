@@ -33,7 +33,7 @@ class MainView(ttk.Frame):
         self.row += 1
 
         self.senha_var = tk.StringVar()
-        self.textosenha = tk.Entry(textvariable=self.senha_var)
+        self.textosenha = tk.Entry(textvariable=self.senha_var, show='*')
         self.textosenha.grid(row=self.row, column=self.column)
         self.row += 2
 
@@ -84,10 +84,10 @@ class MainView(ttk.Frame):
         self.botaosuporte.grid_forget()
         # Chamando view de adm
         if tipo == 'Adm':
-            self.framelist[0].on_login()
+            self.framelist[0].on_login(self.textomatricula.get())
         else:
         #Chamando view de geral
-            self.framelist[1].on_login()
+            self.framelist[1].on_login(self.textomatricula.get())
         
 
         self.index = 1
@@ -875,7 +875,8 @@ class AdmView(ttk.Frame):
         self.framelist[3].grid(row=1, column=3, pady=20)
         self.index = 3
 
-    def on_login(self):
+    def on_login(self, matricula):
+        self.matricula = matricula
         self.gerenciaquadra.grid(row=0, column=3, sticky=tk.EW)
         self.gerenciauser.grid(row=0, column=2, sticky=tk.EW)
         self.criaquadra.grid(row=0, column=1, sticky=tk.EW)
@@ -905,12 +906,15 @@ class GeralView(ttk.Frame):
         # Adicione os widgets para a criação e visualização de reserva de quadra aqui
         self.criar_reserva_button = ttk.Button(parent, text='Criar Reserva', command=self.criar_reserva)
         self.visualizar_reserva_button = ttk.Button(parent, text='Visualizar Reserva', command=self.visualizar_reserva)
+        self.registrar_presença_button = ttk.Button(parent, text='Registrar Presença', command = self.registrar_presença)
         
-       
+        
 
-    def on_login(self):
+    def on_login(self, matricula):
+        self.matricula = matricula
         self.criar_reserva_button.grid(row=0, column=0)
         self.visualizar_reserva_button.grid(row=0, column=1)
+        self.registrar_presença_button.grid(row=0, column=2)
 
     def criar_reserva(self):
         nova_janela = tk.Toplevel(self)
@@ -919,42 +923,139 @@ class GeralView(ttk.Frame):
         label_quadras = ttk.Label(nova_janela, text='Selecione a Quadra:')
         label_quadras.grid(row=0, column=0, padx=10, pady=10)
 
+        self.message_label = ttk.Label(nova_janela, text='', foreground='red')
+        self.message_label.grid(row=2, column=2, sticky=tk.W)
+
         # Exemplo de ComboBox com quadras (substitua com sua lista de quadras)
-        quadras = ['Quadra 1', 'Quadra 2', 'Quadra 3']
-        select_quadras = ttk.Combobox(nova_janela, values=quadras)
+        quadras = self.controller.fetch_quadras()
+        self.quadras_var = tk.StringVar()
+        select_quadras = ttk.Combobox(nova_janela,textvariable=self.quadras_var, values=quadras)
         select_quadras.grid(row=0, column=1, padx=10, pady=10)
 
-        label_data = ttk.Label(nova_janela, text='Data:')
+        #Data inicio
+        label_data = ttk.Label(nova_janela, text='Data inicio:')
         label_data.grid(row=1, column=0, padx=10, pady=10)
-        entry_data = ttk.Entry(nova_janela)
+
+        self.data_var = tk.StringVar()
+        entry_data = ttk.Entry(nova_janela,textvariable=self.data_var)
         entry_data.grid(row=1, column=1, padx=10, pady=10)
 
-        label_hora = ttk.Label(nova_janela, text='Hora:')
-        label_hora.grid(row=2, column=0, padx=10, pady=10)
-        entry_hora = ttk.Entry(nova_janela)
-        entry_hora.grid(row=2, column=1, padx=10, pady=10)
+        #Data fim
+        label_data_fim = ttk.Label(nova_janela, text='Data fim:')
+        label_data_fim.grid(row=2, column=0, padx=10, pady=10)
 
-        botao_criar_reserva = ttk.Button(nova_janela, text='Criar Reserva', command=self.criar_reserva_quadra)
-        botao_criar_reserva.grid(row=3, column=0, columnspan=2, pady=10)
-    
-    def visualizar_reserva(self, reservaid):
-        dados_reserva = self.controller.visualizarReserva(reservaid)
+        self.data_fim_var = tk.StringVar()
+        entry_data_fim = ttk.Entry(nova_janela,textvariable=self.data_fim_var)
+        entry_data_fim.grid(row=2, column=1, padx=10, pady=10)
 
+        #Hora inicio
+        label_hora_inicio = ttk.Label(nova_janela, text='Hora inicio:')
+        label_hora_inicio.grid(row=3, column=0, padx=10, pady=10)
+
+        self.hora_inicio_var = tk.StringVar()
+        entry_hora_inicio = ttk.Entry(nova_janela, textvariable=self.hora_inicio_var)
+        entry_hora_inicio.grid(row=3, column=1, padx=10, pady=10)
+
+        #Hora fim
+        label_hora_fim = ttk.Label(nova_janela, text='Hora fim:')
+        label_hora_fim.grid(row=4, column=0, padx=10, pady=10)
+
+        self.hora_fim_var = tk.StringVar()
+        entry_hora_fim = ttk.Entry(nova_janela, textvariable=self.hora_fim_var)
+        entry_hora_fim.grid(row=4, column=1, padx=10, pady=10)
+
+        botao_criar_reserva = ttk.Button(nova_janela, text='Criar Reserva', command= lambda quadras_var=self.quadras_var, 
+                                         data_var = self.data_var, data_fim_var = self.data_fim_var, 
+                                         hora_inicio_var = self.hora_inicio_var, hora_fim_var = self.hora_fim_var: 
+                                         self.criar_reserva_quadra(quadras_var.get(),'123', data_var.get(), data_fim_var.get(), hora_inicio_var.get(), 
+                                                                   hora_fim_var.get()))
+        botao_criar_reserva.grid(row=5, column=0, columnspan=2, pady=10)
+
+    def buscar_reserva(self, nome_quadra_var):
+        dados_reserva = self.controller.visualizarReserva(nome_quadra_var)
         if dados_reserva:
-            nova_janela = tk.Toplevel(self)
-            nova_janela.title('Visualizar Reserva')
+            index = 0
+            for i in dados_reserva:
+                nova_janela = tk.Toplevel(self)
+                nova_janela.title(f'{nome_quadra_var} reserva {index}')
+                label_nome_quadra = ttk.Label(nova_janela, text=f'{nome_quadra_var} reserva {index}')
+                label_nome_quadra.pack(pady=5,padx=30)
 
-            label_nome_usuario = ttk.Label(nova_janela, text=f'Nome do Usuário: {dados_reserva[0]["nome_usuario"]}')
-            label_nome_usuario.pack(pady=10)
+                label_nome_usuario = ttk.Label(nova_janela, text=f'Data inicio: {i[2]}')
+                label_nome_usuario.pack(pady=5,padx=30)
 
-            label_quadra = ttk.Label(nova_janela, text=f'Quadra: {dados_reserva[0]["nome_quadra"]}')
-            label_quadra.pack(pady=10)
+                label_quadra = ttk.Label(nova_janela, text=f'Data fim: {i[3]}')
+                label_quadra.pack(pady=5,padx=30)
 
-            label_data = ttk.Label(nova_janela, text=f'Data: {dados_reserva[0]["data"]}')
-            label_data.pack(pady=10)
+                label_data = ttk.Label(nova_janela, text=f'Horario inicio: {i[4]}')
+                label_data.pack(pady=5,padx=30)
 
-            label_hora = ttk.Label(nova_janela, text=f'Hora: {dados_reserva[0]["hora"]}')
-            label_hora.pack(pady=10)
+                label_hora = ttk.Label(nova_janela, text=f'Horario fim: {i[5]}\n')
+                label_hora.pack(pady=5,padx=30)
+                index += 1
 
-class ProfView:
-    print('ProfView')
+    def visualizar_reserva(self):
+        nova_janela = tk.Toplevel(self)
+        nova_janela.title('Visualizar Reserva')
+        label_hora = ttk.Label(nova_janela, text=f'Nome da quadra:')
+        label_hora.pack(pady=10)
+        nome_quadra_var = tk.StringVar()
+        entry_quadra_var = ttk.Entry(nova_janela, textvariable=nome_quadra_var)
+        entry_quadra_var.pack(pady=10)
+        botao_buscar_reserva = ttk.Button(nova_janela, text='Buscar', command= lambda nome = nome_quadra_var: self.buscar_reserva(nome.get()))
+        botao_buscar_reserva.pack(pady=10)
+
+    def registrar_presença(self):
+        nova_janela = tk.Toplevel(self)
+        nova_janela.title('Registrar Presença')
+
+
+        label_nome_reserva = ttk.Label(nova_janela, text='Nome Quadra:')
+        label_nome_reserva.grid(row=1, column=0, padx=10, pady=10)
+        nome_quadra_var = tk.StringVar()
+        entry_nome_quadra = ttk.Entry(nova_janela,textvariable=nome_quadra_var)
+        entry_nome_quadra.grid(row=1, column=1, padx=10, pady=10)
+
+        label_dia = ttk.Label(nova_janela, text='Dia:')
+        label_dia.grid(row=2, column=0, padx=10, pady=10)
+        dia_var = tk.StringVar()
+        entry_dia = ttk.Entry(nova_janela,textvariable=dia_var)
+        entry_dia.grid(row=2, column=1, padx=10, pady=10)
+
+        botao_registrar_presenca = ttk.Button(nova_janela,text='Registar', command= lambda dia_var = dia_var, matricula = self.matricula,
+                                              nova_janela = nova_janela, nome_quadra_var = nome_quadra_var: self.verifica_quadra(matricula, nome_quadra_var.get(),dia_var.get(), nova_janela))
+        botao_registrar_presenca.grid(row=3, column = 0, padx=10, pady=10)
+    
+    def criar_reserva_quadra(self, quadraid, matricula, data_inicio,data_fim, horario_inicio, horario_fim):
+        resultado = self.controller.save_reserva(quadraid, matricula, data_inicio, data_fim, horario_inicio, horario_fim)
+        if resultado:
+            self.show_success('Reservado!')
+        else:
+            self.show_error('Não Reservado')
+
+    def verifica_quadra(self,matricula, quadra, dia, nova_janela):
+        boolean = self.controller.verifica_quadra(matricula, quadra, dia)
+        self.message_label = ttk.Label(nova_janela, text='', foreground='red')
+        self.message_label.grid(row=2, column=2, sticky=tk.W)
+        if boolean == True:
+            self.show_success('Presença registrada!')
+        else:
+            
+            self.show_error('Quadra nao encontrada')
+        
+    def set_controller(self, controller):
+        self.controller = controller
+
+    def show_success(self, message):
+        self.message_label['text'] = message
+        self.message_label['foreground'] = 'green'
+        self.message_label.after(3000, self.hide_message)
+    
+    def show_error(self, message):
+        self.message_label['text'] = message
+        self.message_label.after(3000, self.hide_message)  
+
+    def hide_message(self):
+        self.message_label['text'] = ''
+
+

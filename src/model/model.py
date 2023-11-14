@@ -12,30 +12,42 @@ mycursor = mydb.cursor()
 
 
 class User:
-    def __init__(self, userid, nome, tipo, matricula, email, cargo, telefone, data_nascimento, cidade, departamento,
-                 senha):
-        self.userid = userid
-        self.nome = nome
-        self.tipo = tipo
-        self.matricula = matricula
-        self.email = email
-        self.cargo = cargo
-        self.telefone = telefone
-        self.data_nascimento = data_nascimento
-        self.cidade = cidade
-        self.departamento = departamento
-        self.senha = senha
-        self.punicao = 0
+    def __init__(self):
+        mycursor.execute('SELECT userid, nome, tipo, matricula, email, cargo, telefone, data_nascimento, cidade, departamento, senha, punicao FROM usuarios')
+        resultados = mycursor.fetchall()
+        for i in resultados:
+            self.userid = i[0]
+            self.nome = i[1]
+            self.tipo = i[2]
+            self.matricula = i[3]
+            self.email = i[4]
+            self.cargo = i[5]
+            self.telefone = i[6]
+            self.data_nascimento = i[7]
+            self.cidade = i[8]
+            self.departamento = i[9]
+            self.senha = i[10]
+            self.punicao = i[11]
 
 
 class Quadra:
-    def __init__(self, quadraid, local, nome, horario_limpeza, capacidade, horario_disponivel):
-        self.quadraid = quadraid
-        self.nome = nome
-        self.local = local
-        self.capacidade = capacidade
-        self.horario_disponivel = horario_disponivel
-        self.horario_limpeza = horario_limpeza
+    def __init__(self):
+        self.quadraid = []
+        self.local = []
+        self.nome = []
+        self.capacidade = []
+        self.horario_disponivel = []
+        self.horario_limpeza = []
+        mycursor.execute('SELECT quadraid ,nome, local, capacidade, horario_disponivel, horario_limpeza FROM quadras')
+        resultados = mycursor.fetchall()
+        for i in resultados:
+            self.quadraid.append(i[0])
+            self.nome.append(i[1])
+            self.local.append(i[2])
+            self.capacidade.append(i[3])
+            self.horario_disponivel.append(i[4])
+            self.horario_limpeza.append(i[5])
+        
 
 
 class Model:
@@ -43,7 +55,8 @@ class Model:
         self.colunasusuario = ['nome', 'matricula', 'tipo', 'email', 'telefone', 'data_nascimento', 'cidade', 'senha',
                                'cargo', 'departamento']
         self.colunasquadra = ['nome', 'local', 'capacidade', 'horario_disponivel', 'horario_limpeza']
-
+        self.cursor = mycursor
+        self.db = mydb
     def criaUser(self, nome, matricula, tipo, email, cargo, telefone, data_nascimento, cidade, departamento, senha):
         sql = "INSERT INTO usuarios (nome, tipo, matricula, email, cargo, telefone, data_nascimento, cidade, " \
               "departamento, senha) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
@@ -61,21 +74,21 @@ class Model:
 
     def RealizaLogin(self, matricula, senha):
         mycursor.execute('SELECT matricula, senha, tipo FROM usuarios')
-        resultados = mycursor.fetchall()
-        for x in resultados:
+        i = mycursor.fetchall()
+        for x in i:
             if x[0] == matricula and x[1] == senha:
                 return True, x[2]
         return False, None
 
     def retornaUser(self):
         mycursor.execute('SELECT nome, matricula FROM usuarios')
-        resultados = mycursor.fetchall()
-        return resultados
+        i = mycursor.fetchall()
+        return i
 
     def retornaQuadra(self):
         mycursor.execute('SELECT quadraid ,nome, local FROM quadras')
-        resultados = mycursor.fetchall()
-        return resultados
+        i = mycursor.fetchall()
+        return i
 
     def deleteUser(self, matricula):
         mycursor.execute(f"DELETE FROM usuarios WHERE matricula = '{matricula}'")

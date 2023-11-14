@@ -96,16 +96,50 @@ class ControllerAdm:
             matriz.append(i.get())
         self.model.editQuadra(quadra, matriz)
 
-class ControllerReserva:
-    def __init__(self, model, view):
+    
+class ControllerGeral:
+    def __init__(self, quadras, model, view):
           self.model = model
           self.view = view
-
-    def savereserva(self, reservaId, quadraid, usuarioId, data, hora):
-                
-        self.model.criaReserva(reservaId=reservaId,quadraid=quadraid,usuarioId=usuarioId,data=data, hora = hora)
-                
-        self.view.show_success(f'Reserva: {reservaId}, Local:{quadraid}, Capacidade: {usuarioId},Data:{data}, Horario: {hora}')
+          self.quadras = quadras
+    def fetch_quadras(self):
+        quadras = self.quadras.nome
+        return quadras
+    
+    def save_reserva(self, quadraid, matricula, data_inicio,data_fim, horario_inicio, horario_fim):
+        try:
+            self.model.cursor.execute(f"SELECT quadraid FROM quadras WHERE nome = '{quadraid}'")
+            true_quadraid = self.model.cursor.fetchall()
+            sql = 'INSERT INTO reservas (quadraid, matricula, data_inicio,data_fim, horario_inicio, horario_fim) VALUES (%s, %s, %s, %s, %s, %s)'
+            val = (f"{true_quadraid[0][0]}",f"{matricula}",f"{data_inicio}",f"{data_fim}",f"{horario_inicio}",f"{horario_fim}")       
+            self.model.cursor.execute(sql, val)
+            self.model.db.commit()
+            return True
+        except:
+            return False
+            
         
-    def visualizarReserva(self, reservaId):
-         self.model.visualizarReserva(reservaId)
+
+    def visualizarReserva(self, quadra):
+        self.model.cursor.execute(f'SELECT quadraid FROM quadras WHERE nome = "{quadra}"')
+        quadraid = self.model.cursor.fetchall()
+        if len(quadraid) == 0:
+            return False
+        self.model.cursor.execute(f'SELECT * FROM reservas WHERE quadraid = "{quadraid[0][0]}"')
+        reservas = self.model.cursor.fetchall()
+        return reservas
+
+    def verifica_quadra(self,matricula, quadra, dia):
+        
+        for i in self.quadras.nome:
+             if i == quadra:
+                self.model.cursor.execute(f"SELECT quadraid FROM quadras WHERE nome = '{quadra}'")
+                quadraid = self.model.cursor.fetchall()
+                self.model.cursor.execute(f"SELECT reservaid FROM reservas WHERE quadraid = '{quadraid[0][0]}'")
+                reservaid = self.model.cursor.fetchall()
+                sql = ('INSERT INTO  presenca (matricula, reservaid, dia) VALUES (%s, %s, %s)')
+                val = (f"{matricula}",f"{reservaid[0][0]}",f"{dia}")
+                self.model.cursor.execute(sql,val)
+                self.model.db.commit()
+                return True
+        return False 
