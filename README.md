@@ -30,6 +30,50 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 O Sistema de Gerenciamento de Alocação de Quadra (SGAQ) é uma sistema desevolvido em python com mysql buscando otimizar o processo de reserva e utilização da quadra esportiva da Universidade Federal de São João del-Rei (UFSJ). O software oferece funcionalidades de reserva de horários, gerenciamento de equipamentos, registro de presença. Ele é destinado a diferentes perfis de usuários, como professores, atléticas, funcionários e comunidade em geral. 💰
 
+## ⚙️ Instalação
+
+Para instalar o sistema, siga os seguintes passos:
+
+1. Clone o repositório do GitHub:
+
+    ```bash
+    git clone https://github.com/sidjr2/SGAQ---APS
+    ```
+2. Entre na pasta e instale os requirements:
+
+    ```bash
+    cd .\SGAQ---APS\
+    pip install -r requirements.txt
+    ```
+2.1. Crie o DataBase no MySql:
+  ```bash
+  mysql > 
+  mysql > CREATE DATABASE pytest;
+  mysql > CREATE TABLE presenca (matricula VARCHAR(255), reservaid VARCHAR(255), dia VARCHAR(255));
+  mysql > CREATE TABLE quadras (nome VARCHAR(255) PRIMARY KEY, local VARCHAR(255), capacidade INT, horario_disponivel VARCHAR(255), horario_limpeza VARCHAR(255));
+  mysql > CREATE TABLE reservas (quadraid VARCHAR(255), matricula VARCHAR(255), data_inicio VARCHAR(255), data_fim VARCHAR(255), horario_inicio VARCHAR(255), horario_fim VARCHAR(255));
+  mysql > CREATE TABLE usuarios (nome VARCHAR(255), tipo VARCHAR(255), matricula VARCHAR(255) PRIMARY KEY, email VARCHAR(255), cargo VARCHAR(255), telefone VARCHAR(255), data_nascimento VARCHAR(255), cidade VARCHAR(255), departamento VARCHAR(255), senha telefone VARCHAR(255), punicao INT)
+  mysql > INSERT INTO usuarios (nome, tipo, matricula, email, cargo, telefone, data_nascimento, cidade, departamento, senha, punicao,userid) VALUES ('Nome', 'Adm', '123', 'email', 'cargo', telefone','data','cidade','depto','123','0','0')
+  ```
+3. Alterar as linhas do arquivo "Database.py", para puxar o seu banco de dados:
+   ```bash
+   cd persistance/Database.py
+   mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="(alterar senha)",
+        database="pytest"
+    )
+   ```
+4. Execulte o Programa
+   ```bash
+     python3 main.py
+   ```
+6. Login de acesso
+   ```bash
+   Matricula: 123
+   Senha: 123
+   ```
 ## 📊 Diagramas
 
 ### Diagrama de Casos de Uso
