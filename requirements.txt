@@ -1,2 +1,2 @@
-python3-tk
+tk
 mysql-connector-python
