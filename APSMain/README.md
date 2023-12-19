@@ -1,6 +1,5 @@
 # SISTEMA DE GERENCIAMENTO DE ALOCAÇÃO DE QUADRA - SGAQ
 
-=======
 <p align="center">
   <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -70,4 +69,3 @@ Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](.github/LICENSE.
 ---
 
 Feito com ♥ by Davi Kreppel, Gustavo Detomi, Leandro Souza, Matheus Nascimento e Sidney Junior. :wave:
-
